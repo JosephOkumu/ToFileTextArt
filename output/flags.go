@@ -28,8 +28,12 @@ func ParseOptions() (Options, error) {
 		options.InputText = flag.Arg(0)
 	case 2:
 		// Two arguments: colorize letters and input text or bannerfile
-		if flag.Arg(1) == "thinkertoy" || flag.Arg(1) == "standard" || flag.Arg(1) == "shadow" {
-			options.BannerFile = flag.Arg(1)
+		banner := strings.ToLower(flag.Arg(1))
+		if banner == "thinkertoy" || banner == "standard" || banner == "shadow" {
+			options.InputText = flag.Arg(0)
+			options.BannerFile = banner
+		} else if banner == "thinkertoy.txt" || banner == "standard.txt" || banner == "shadow.txt" {
+			options.BannerFile = strings.TrimSuffix(banner, ".txt")
 			options.InputText = flag.Arg(0)
 		} else {
 			if options.ColorFlag != "" {
