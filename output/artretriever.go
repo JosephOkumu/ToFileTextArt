@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// ArtPrinter returns the ASCII art corresponding to the input string using the provided map.
+// ArtRetriever returns the ASCII art corresponding to the input string using the provided map.
 func ArtRetriever(s, c, l string, m map[rune][]string) (string, error) {
 	var result strings.Builder
 
@@ -81,38 +81,6 @@ func ArtRetriever(s, c, l string, m map[rune][]string) (string, error) {
 								return "", fmt.Errorf("invalid input: %s", string(char))
 							}
 							start++
-						}
-					}
-					result.WriteString("\n")
-				}
-			}
-		}
-	} else {
-		// Iterate over each line of the input string
-		for ind := 0; ind < len(lines); ind++ {
-			if lines[ind] == "" {
-				// Add an empty line if the input line is empty
-				result.WriteString("\n")
-			} else {
-				// Add ASCII art for each character in the input line
-				for j := 0; j < 8; j++ {
-					for _, char := range lines[ind] {
-						if asciiArt, ok := m[char]; ok {
-							if c != "" {
-								if l == "" || strings.ContainsRune(l, char) {
-									// Add the corresponding ASCII art for the character
-									result.WriteString(Colorize(c, asciiArt[j]))
-								} else {
-									// Leave the rest of the characters un-colored
-									result.WriteString(asciiArt[j])
-								}
-							} else {
-								// Leave the whole art un-colored if no color flag is provided
-								result.WriteString(asciiArt[j])
-							}
-						} else {
-							// Handle invalid non-printable non-ascii characters in the input
-							return "", fmt.Errorf("invalid input: %s", string(char))
 						}
 					}
 					result.WriteString("\n")
