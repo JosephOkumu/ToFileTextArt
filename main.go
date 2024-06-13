@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 
 	"asciiart/output"
 )
@@ -50,7 +51,13 @@ func main() {
 
 	outputFile := ""
 	if options.OutputFlag != "" {
-		outputFile = options.OutputFlag
+		if strings.HasSuffix(options.OutputFlag, ".txt") {
+			outputFile = options.OutputFlag
+		} else {
+			fmt.Println("error: the output file must be a text file (filename.txt), printing to the terminal instead")
+			fmt.Print(asciiArt)
+			return
+		}
 	} else {
 		fmt.Print(asciiArt)
 		return
