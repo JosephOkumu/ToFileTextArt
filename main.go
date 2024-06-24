@@ -10,7 +10,7 @@ import (
 )
 
 // main function reads a banner file, creates a map of ASCII art, validates user input,
-// and prints the corresponding ASCII art to the console.
+// and prints the corresponding ASCII art to the output file.
 func main() {
 	// Check if color flag is not provided correctly, i.e. provided without equal sign.
 	properColorFlag := regexp.MustCompile(`^-color(?:=(.+))?$`)
@@ -30,7 +30,7 @@ func main() {
 	options, err := output.ParseOptions()
 	check(err)
 
-	// Get ANSI format string to colorize ASCII-art in the terminal.
+	// Get ANSI format string to colorize ASCII-art in the output file.
 	colorCode, err := output.SetColor(options.ColorFlag)
 	check(err)
 
@@ -49,9 +49,13 @@ func main() {
 	asciiArt, err := output.ArtRetriever(options.InputText, colorCode, options.ColorizeLetters, ASCIIArtMap)
 	check(err)
 
+	// Checking whether the specified output file is a text file.
 	outputFile := ""
 	if options.OutputFlag != "" {
-		if strings.HasSuffix(options.OutputFlag, ".txt") {
+		if strings.HasPrefix(options.OutputFlag, "./banners/") || strings.HasPrefix(options.OutputFlag, "banners/") {
+			fmt.Println("error: cannot write to or modify files in the banners directory")
+			return
+		} else if strings.HasSuffix(options.OutputFlag, ".txt") {
 			outputFile = options.OutputFlag
 		} else {
 			fmt.Println("error: the output file must be a text file (filename.txt), printing to the terminal instead")
