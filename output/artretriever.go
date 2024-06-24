@@ -34,57 +34,55 @@ func ArtRetriever(s, c, l string, m map[rune][]string) (string, error) {
 		return result.String(), nil
 	}
 	lines := strings.Split(str, "\n")
-	if strings.Contains(str, l) {
-		// Iterate over each line of the input string
-		for ind := 0; ind < len(lines); ind++ {
-			if lines[ind] == "" {
-				// Add an empty line if the input line is empty
-				result.WriteString("\n")
-			} else {
-				// Add ASCII art for each character in the input line
-				for j := 0; j < 8; j++ {
-					start := 0
-					for start < len(lines[ind]) {
-						if l == "" {
-							// Add the corresponding ASCII art for each character
-							for _, char := range lines[ind] {
-								if asciiArt, ok := m[char]; ok {
-									if c != "" {
-										result.WriteString(Colorize(c, asciiArt[j]))
-									} else {
-										result.WriteString(asciiArt[j])
-									}
-								} else {
-									// Handle invalid non-printable non-ascii characters in the input
-									return "", fmt.Errorf("error! invalid input: %s", string(char))
-								}
-							}
-							break
-						} else if strings.HasPrefix(lines[ind][start:], l) {
-							// Colorize the substring l
-							for _, char := range l {
-								if asciiArt, ok := m[char]; ok {
+	// Iterate over each line of the input string
+	for ind := 0; ind < len(lines); ind++ {
+		if lines[ind] == "" {
+			// Add an empty line if the input line is empty
+			result.WriteString("\n")
+		} else {
+			// Add ASCII art for each character in the input line
+			for j := 0; j < 8; j++ {
+				start := 0
+				for start < len(lines[ind]) {
+					if l == "" {
+						// Add the corresponding ASCII art for each character
+						for _, char := range lines[ind] {
+							if asciiArt, ok := m[char]; ok {
+								if c != "" {
 									result.WriteString(Colorize(c, asciiArt[j]))
 								} else {
-									// Handle invalid non-printable non-ascii characters in the input
-									return "", fmt.Errorf("invalid input: %s", string(char))
+									result.WriteString(asciiArt[j])
 								}
+							} else {
+								// Handle invalid non-printable non-ascii characters in the input
+								return "", fmt.Errorf("error! invalid input: %s", string(char))
 							}
-							start += len(l)
-						} else {
-							// Add the ASCII art for the current character without coloring
-							char := rune(lines[ind][start])
+						}
+						break
+					} else if strings.HasPrefix(lines[ind][start:], l) {
+						// Colorize the substring l
+						for _, char := range l {
 							if asciiArt, ok := m[char]; ok {
-								result.WriteString(asciiArt[j])
+								result.WriteString(Colorize(c, asciiArt[j]))
 							} else {
 								// Handle invalid non-printable non-ascii characters in the input
 								return "", fmt.Errorf("invalid input: %s", string(char))
 							}
-							start++
 						}
+						start += len(l)
+					} else {
+						// Add the ASCII art for the current character without coloring
+						char := rune(lines[ind][start])
+						if asciiArt, ok := m[char]; ok {
+							result.WriteString(asciiArt[j])
+						} else {
+							// Handle invalid non-printable non-ascii characters in the input
+							return "", fmt.Errorf("invalid input: %s", string(char))
+						}
+						start++
 					}
-					result.WriteString("\n")
 				}
+				result.WriteString("\n")
 			}
 		}
 	}
