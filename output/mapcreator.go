@@ -12,7 +12,7 @@ func MapCreator(s string) (map[rune][]string, error) {
 	printableRune := rune(32)
 
 	// Check if any art characters have been deleted from the bannerfile
-	if len(s) != 6623 && len(s) != 5558 && len(s) != 7463 {
+	if len(s) != 6623 && len(s) != 5558 && len(s) != 7463 && len(s) != 6262 {
 		return Map, errors.New("the bannerfile has been tampered with")
 	}
 
