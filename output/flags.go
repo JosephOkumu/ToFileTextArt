@@ -14,7 +14,7 @@ type Options struct {
 	BannerFile      string
 }
 
-// ColorFlag function parses command-line arguments to extract color options, text to be colored, and banner file name.
+// ParseOptions function parses command-line arguments to extract color options, text to be colored, file to output the data, and banner file name.
 func ParseOptions() (Options, error) {
 	// Define flag for color option
 	var options Options
@@ -29,10 +29,11 @@ func ParseOptions() (Options, error) {
 	case 2:
 		// Two arguments: colorize letters and input text or bannerfile
 		banner := strings.ToLower(flag.Arg(1))
-		if banner == "thinkertoy" || banner == "standard" || banner == "shadow" {
+		if banner == "thinkertoy" || banner == "standard" || banner == "shadow" || banner == "rounded" {
 			options.InputText = flag.Arg(0)
 			options.BannerFile = banner
-		} else if banner == "thinkertoy.txt" || banner == "standard.txt" || banner == "shadow.txt" {
+			// Check if the specified banner file includes .txt extension and trimming the suffix .txt if present.
+		} else if banner == "thinkertoy.txt" || banner == "standard.txt" || banner == "shadow.txt" || banner == "rounded.txt" {
 			options.BannerFile = strings.TrimSuffix(banner, ".txt")
 			options.InputText = flag.Arg(0)
 		} else {
